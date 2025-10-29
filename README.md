@@ -9,7 +9,7 @@ Welcome to your analysis project scaffold! This guide summarizes the most common
 ## 1. Create a New Project
 ```bash
 pip install cookiecutter
-cookiecutter path/to/cookiecutter-analysis-template
+cookiecutter git@github.com:drimal/cookiecutter-project-template.git
 ```
 
 You’ll be asked to enter:
