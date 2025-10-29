@@ -1,0 +1,12 @@
+system_prompts:
+- id: sys_example
+  version: 1
+  description: Example system prompt
+  text: You are a precise assistant. Summarize clearly.
+  timestamp: '2025-10-29 00:00:00'
+user_templates:
+- id: user_example
+  version: 1
+  description: Example user template
+  text: 'Summarize the following text: {{text}}'
+  timestamp: '2025-10-29 00:00:00'
