@@ -1,0 +1,20 @@
+[project]
+name = "{{cookiecutter.project_slug}}"
+version = "0.1.0"
+description = "Analysis and AI experimentation project"
+authors = [{ name = "{{cookiecutter.author_name}}" }]
+dependencies = [
+    "pandas>=2.1",
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+    "scikit-learn>=1.4",
+    "jupyterlab>=4.0",
+    "ipython>=8.20",
+    "papermill>=2.5",
+    "pyyaml>=6.0",
+    "rich>=13.7",
+    "openai>=1.0",
+]
+
+[tool.uv]
+python = ">=3.10"
