@@ -8,5 +8,5 @@ user_templates:
 - id: user_example
   version: 1
   description: Example user template
-  text: 'Summarize the following text: {{text}}'
+  text: 'Summarize the following text: [Some Text]'
   timestamp: '2025-10-29 00:00:00'
