@@ -10,7 +10,9 @@
 - results/figures: Visualizations  
 - results/tables: Tabular outputs  
 - results/exports: Reports, models, or deliverables  
-- src/: Reusable helper functions  
+- src/: Reusable helper functions
+- requirement.txt: requirements 
+- pyproject.toml:  
 
 ## Workflow
 Run notebooks in order (1 → 4) for reproducibility.
