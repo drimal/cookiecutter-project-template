@@ -3,6 +3,8 @@ name = "{{cookiecutter.project_slug}}"
 version = "0.1.0"
 description = "Analysis and AI experimentation project"
 authors = [{ name = "{{cookiecutter.author_name}}" }]
+requires-python = ">=3.10"
+
 dependencies = [
     "pandas>=2.1",
     "numpy>=1.26",
@@ -16,5 +18,10 @@ dependencies = [
     "openai>=1.0",
 ]
 
-[tool.uv]
-python = ">=3.10"
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+# Optional section for uv to locate dependencies
+pypi = { url = "https://pypi.org/simple" }
