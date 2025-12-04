@@ -1,7 +1,32 @@
-# Core dependencies
-# Add your project dependencies here
+# Minimal runtime dependencies for the generated project.
+# This file is rendered from the template and will only include
+# the packages required for the features you selected during project
+# generation (CLI, API, AI/ML research).
 
-# Development dependencies (optional)
+{%- if cookiecutter.include_cli == "yes" %}
+# CLI support
+click>=8.0
+{%- endif %}
+
+{%- if cookiecutter.include_api == "yes" %}
+# API support
+fastapi>=0.95
+uvicorn[standard]>=0.18
+{%- endif %}
+
+{%- if cookiecutter.include_ai_research == "yes" %}
+# AI / ML research (keep to minimal science stack)
+numpy>=1.24
+pandas>=2.0
+scikit-learn>=1.2
+pyyaml>=6.0
+{%- endif %}
+
+{%- if cookiecutter.include_cli != "yes" and cookiecutter.include_api != "yes" and cookiecutter.include_ai_research != "yes" %}
+# No runtime dependencies selected. Add your project-specific packages here.
+{%- endif %}
+
+# Development / testing tools (uncomment or install in a dev environment)
 # pytest>=7.0
 # pytest-cov>=4.0
 # black>=23.0
