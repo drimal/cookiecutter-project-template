@@ -1,7 +1,0 @@
-project_id: '{{cookiecutter.project_id}}'
-project_name: '{{cookiecutter.project_name}}'
-author_name: '{{cookiecutter.author_name}}'
-date_created: '{{cookiecutter.date_created}}'
-default_threshold: 0.8
-data_path: data/processed/{{cookiecutter.project_id}}_clean.csv
-results_folder: results
