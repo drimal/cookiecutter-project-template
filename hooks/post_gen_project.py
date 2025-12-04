@@ -90,6 +90,6 @@ else:
     print(f"         python -m pip install --user pipx && python -m pipx ensurepath")
     print(f"         pipx install uv")
 
-print(f"   3. pip install -r requirements.txt")
+print(f"   3. pip install -r requirements.txt OR uv pip install -r requirements.txt ")
 print(f"   4. pytest tests/")
 
