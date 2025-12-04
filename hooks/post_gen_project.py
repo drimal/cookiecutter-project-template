@@ -66,15 +66,27 @@ print(f"   1. cd {project_dir}")
 # Prefer 'uv' (if available) as an alternative virtualenv helper.
 # `uv` is a Python package that provides a small virtualenv helper. It may be
 # installed globally, via `pipx`, or in user site-packages. We cannot import
-# it reliably here, so show both usage and install instructions.
+# it reliably here, so show both usage and install instructions for Unix and
+# Windows (PowerShell and cmd) users.
 if shutil.which("uv"):
     print(f"   2. (optional) create/activate virtualenv with `uv`: e.g. `uv .venv`")
 else:
+    # Unix / macOS
     print(f"   2. python -m venv .venv && source .venv/bin/activate")
     print(f"      OR, to use the `uv` helper (if you prefer):")
     print(f"         - install via pipx: `pipx install uv`")
     print(f"         - or install via pip: `pip install --user uv`")
     print(f"         then run: `uv .venv`")
+    # Windows examples
+    print(f"      Windows (PowerShell):")
+    print(f"         python -m venv .venv")
+    print(f"         .\\.venv\\Scripts\\Activate.ps1")
+    print(f"      Windows (cmd.exe):")
+    print(f"         python -m venv .venv")
+    print(f"         .\\.venv\\Scripts\\activate.bat")
+    print(f"      To install `uv` on Windows (optional):")
+    print(f"         python -m pip install --user pipx && python -m pipx ensurepath")
+    print(f"         pipx install uv")
 
 print(f"   3. pip install -r requirements.txt")
 print(f"   4. pytest tests/")
