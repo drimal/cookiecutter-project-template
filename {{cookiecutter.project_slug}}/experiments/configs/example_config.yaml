@@ -1,0 +1,40 @@
+# Example experiment configuration
+# Copy and modify this file for your experiments
+
+experiment_name: "baseline_experiment"
+description: "Initial baseline model to establish performance metrics"
+
+# Model configuration
+model:
+  type: "neural_network"
+  layers: 3
+  units_per_layer: 128
+  activation: "relu"
+  dropout: 0.2
+
+# Training configuration
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  optimizer: "adam"
+  early_stopping: true
+  patience: 10
+
+# Data configuration
+data:
+  train_split: 0.8
+  validation_split: 0.1
+  test_split: 0.1
+  random_seed: 42
+
+# Expected metrics (for comparison)
+expected_metrics:
+  accuracy: 0.85
+  precision: 0.84
+  recall: 0.86
+  f1_score: 0.85
+
+notes: |
+  This is a baseline experiment to establish performance metrics.
+  Results will be compared against improved models.
