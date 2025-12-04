@@ -1,0 +1,20 @@
+# Include README and LICENSE in distributions
+include README.md
+include LICENSE
+include requirements.txt
+
+# Include configuration files
+recursive-include . *.toml
+recursive-include . *.yaml
+recursive-include . *.yml
+recursive-include . *.json
+
+# Exclude common unneeded directories
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude .DS_Store
+global-exclude .git
+global-exclude .gitignore
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude .tox

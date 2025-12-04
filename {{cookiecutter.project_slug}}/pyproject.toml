@@ -45,24 +45,47 @@ api = [
 ]
 {%- endif %}
 
+{%- if cookiecutter.include_cli == "yes" %}
+[project.scripts]
+{{ cookiecutter.project_slug }} = "{{ cookiecutter.package_name }}.cli:main"
+{%- endif %}
+
 [tool.setuptools]
-packages = ["{{cookiecutter.package_name}}"]
+packages = ["{{ cookiecutter.package_name }}"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
-addopts = "--cov={{cookiecutter.package_name}} --cov-report=html --cov-report=term-missing"
+python_files = ["test_*.py", "conftest.py"]
+addopts = "--cov={{ cookiecutter.package_name }} --cov-report=html --cov-report=term-missing -v"
 
 [tool.black]
 line-length = 100
 target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
 
 [tool.isort]
 profile = "black"
 line_length = 100
+skip_gitignore = true
+known_first_party = ["{{ cookiecutter.package_name }}"]
 
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
+ignore_missing_imports = true
+
