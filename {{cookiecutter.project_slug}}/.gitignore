@@ -138,4 +138,5 @@ Thumbs.db
 data/raw/
 data/processed/
 experiments/runs/
+notebooks/.ipynb_checkpoints/
 {%- endif %}

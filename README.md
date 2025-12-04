@@ -203,6 +203,17 @@ Creates a complete project with CLI, API, and research capabilities.
 This repository contains:
 - `cookiecutter.json` - Template configuration and variables
 - `{{cookiecutter.project_slug}}/` - The template directory that gets generated as your new project
+- `hooks/post_gen_project.py` - Post-generation hook that removes unused directories based on your selections
+
+### How It Works
+
+When you run cookiecutter:
+1. The template creates all possible directories and files
+2. The `post_gen_project.py` hook runs after generation
+3. Unused components are automatically removed based on your feature selections:
+   - If `include_cli=no`: `cli.py` and `test_cli.py` are removed
+   - If `include_api=no`: `api/`, `scripts/`, and `test_api.py` are removed
+   - If `include_ai_research=no`: `data/`, `experiments/`, `notebooks/`, `reports/`, `test_models.py`, and `test_train.py` are removed
 
 ## Contributing
 
