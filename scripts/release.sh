@@ -8,9 +8,17 @@ set -euo pipefail
 TAG=${1:-}
 TITLE=${2:-"$TAG"}
 
+# If no tag supplied, attempt to compute next tag using commits
 if [ -z "$TAG" ]; then
-  echo "Usage: $0 <tag> [release-title]"
-  exit 2
+  if [ -x "scripts/compute_next_tag.sh" ]; then
+    echo "No tag specified — computing next tag from commits"
+    TAG=$(scripts/compute_next_tag.sh)
+    TITLE="$TAG"
+    echo "Computed tag: $TAG"
+  else
+    echo "Usage: $0 <tag> [release-title]" >&2
+    exit 2
+  fi
 fi
 
 # ensure we're on main and working tree clean

@@ -42,6 +42,15 @@ jobs:
         run: |
           ./scripts/generate_changelog.sh "${{ steps.tag.outputs.tag }}"
 
+      - name: Build release artifact (zip)
+        run: |
+          TAG=${{ steps.tag.outputs.tag }}
+          ART=/tmp/template-${TAG}.zip
+          # Package repository root as the template artifact, excluding git internals
+          zip -r "$ART" . -x .git\* -x .github/workflows/* || true
+          ls -lh "$ART" || true
+
+
       - name: Install GitHub CLI
         uses: cli/gh-action@v2
         with:
@@ -57,6 +66,11 @@ jobs:
             gh release create "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}" --notes "Release ${{ steps.tag.outputs.tag }}"
           fi
 
-      - name: Upload CHANGELOG.md to release
+      - name: Upload assets to release
         run: |
-          gh release upload "${{ steps.tag.outputs.tag }}" CHANGELOG.md --clobber || true
+          TAG=${{ steps.tag.outputs.tag }}
+          gh release upload "$TAG" CHANGELOG.md --clobber || true
+          ART=/tmp/template-${TAG}.zip
+          if [ -f "$ART" ]; then
+            gh release upload "$TAG" "$ART" --clobber || true
+          fi
