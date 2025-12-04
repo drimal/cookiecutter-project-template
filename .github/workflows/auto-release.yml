@@ -1,0 +1,62 @@
+name: Auto Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v0.2.0). If empty, uses ref.'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-publish:
+    name: Generate changelog and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Determine tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag || '' }}" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            # github.ref for push tag is refs/tags/<tag>
+            REF_NAME=${GITHUB_REF#refs/tags/}
+            echo "tag=${REF_NAME}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Make scripts executable
+        run: chmod +x scripts/generate_changelog.sh
+
+      - name: Generate CHANGELOG entry and commit
+        run: |
+          ./scripts/generate_changelog.sh "${{ steps.tag.outputs.tag }}"
+
+      - name: Install GitHub CLI
+        uses: cli/gh-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish release (create or update)
+        run: |
+          NOTES_FILE=/tmp/release-notes-for-${{ steps.tag.outputs.tag }}.md
+          if [ -f "$NOTES_FILE" ]; then
+            gh release create "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}" --notes-file "$NOTES_FILE" || \
+              gh release edit "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}" --notes-file "$NOTES_FILE"
+          else
+            gh release create "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}" --notes "Release ${{ steps.tag.outputs.tag }}"
+          fi
+
+      - name: Upload CHANGELOG.md to release
+        run: |
+          gh release upload "${{ steps.tag.outputs.tag }}" CHANGELOG.md --clobber || true
