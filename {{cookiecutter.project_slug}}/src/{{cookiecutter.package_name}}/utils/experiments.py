@@ -1,22 +1,25 @@
+{%- if cookiecutter.include_ai_research == "yes" %}
 """Experiment tracking and logging utilities.
 
 This module provides utilities for tracking experiments, logging results,
 and managing experiment configurations.
+
+Available in AI/ML research projects.
 """
 
-import json
 import csv
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 
 class ExperimentLogger:
-    """Log and track experiments with configurations and results."""
+    """Logger for tracking ML experiments with JSON and CSV outputs."""
 
     def __init__(self, runs_dir: str = "experiments/runs"):
         """Initialize experiment logger.
-        
+
         Args:
             runs_dir: Directory to store experiment runs
         """
@@ -28,21 +31,21 @@ class ExperimentLogger:
         self,
         name: str,
         config: Dict[str, Any],
-        metrics: Dict[str, float],
+        metrics: Dict[str, Any],
         notes: Optional[str] = None,
     ) -> str:
-        """Log an experiment run.
-        
+        """Log a single experiment run.
+
         Args:
-            name: Experiment name
-            config: Experiment configuration
-            metrics: Experiment metrics/results
-            notes: Optional notes about the experiment
-            
+            name: Name of the experiment
+            config: Configuration dictionary
+            metrics: Metrics dictionary with results
+            notes: Optional notes about the run
+
         Returns:
-            Run ID
+            run_id: Unique identifier for this run
         """
-        run_id = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        run_id = f"run_{len(self.runs):04d}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
         run_data = {
             "run_id": run_id,
@@ -55,58 +58,62 @@ class ExperimentLogger:
         
         self.runs.append(run_data)
         
-        # Save to JSON
+        # Save individual run to JSON
         run_file = self.runs_dir / f"{run_id}.json"
         with open(run_file, "w") as f:
             json.dump(run_data, f, indent=2)
         
+        print(f"✅ Logged run: {run_id}")
         return run_id
 
-    def save_summary(self, output_file: str = "experiments/runs_summary.csv") -> None:
+    def save_summary(self, output_file: str = "experiments/runs/summary.csv") -> None:
         """Save summary of all runs to CSV.
-        
+
         Args:
             output_file: Path to output CSV file
         """
         if not self.runs:
-            print("No runs to save")
+            print("⚠️  No runs to save")
             return
         
         output_path = Path(output_file)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, "w", newline="") as f:
-            fieldnames = ["run_id", "name", "timestamp", "notes"]
-            # Add metric names to fieldnames
-            if self.runs and "metrics" in self.runs[0]:
-                fieldnames.extend(self.runs[0]["metrics"].keys())
-            
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["run_id", "name", "timestamp", "best_metric", "notes"],
+            )
             writer.writeheader()
             
             for run in self.runs:
-                row = {
+                metrics = run.get("metrics", {})
+                best_metric = max(metrics.values()) if metrics else None
+                
+                writer.writerow({
                     "run_id": run["run_id"],
                     "name": run["name"],
                     "timestamp": run["timestamp"],
+                    "best_metric": best_metric,
                     "notes": run["notes"],
-                }
-                row.update(run["metrics"])
-                writer.writerow(row)
+                })
+        
+        print(f"✅ Saved summary to {output_file}")
 
 
-# Example usage
+# Example usage (for reference during development)
 if __name__ == "__main__":
     logger = ExperimentLogger()
     
-    # Log a sample run
+    # Log first run
     logger.log_run(
         name="baseline_model",
-        config={"model": "linear", "learning_rate": 0.01},
+        config={"model": "linear_regression", "epochs": 10},
         metrics={"accuracy": 0.85, "loss": 0.25},
         notes="Initial baseline",
     )
     
+    # Log second run with improvements
     logger.log_run(
         name="improved_model",
         config={"model": "neural_net", "layers": 3, "learning_rate": 0.001},
@@ -116,3 +123,4 @@ if __name__ == "__main__":
     
     logger.save_summary()
     print("✅ Experiments logged successfully")
+{%- endif %}
