@@ -3,40 +3,107 @@
 **Author**: {{ cookiecutter.author_name }}  
 **Created**: {{ cookiecutter.date_created }}  
 
+## Overview
+
+This is an example project demonstrating the cookiecutter template structure for data science and research projects. The template supports flexible configurations for different project types including CLI tools, REST APIs, and AI/ML research workflows.
+
 ## Project Structure
-- notebooks/: Analysis workflow broken into stages  
-- data/raw: Original unmodified data  
-- data/processed: Cleaned and prepared data  
-- results/figures: Visualizations  
-- results/tables: Tabular outputs  
-- results/exports: Reports, models, or deliverables  
-- src/: Reusable helper functions
-- requirement.txt: requirements 
-- pyproject.toml:  
 
-## Workflow
-Run notebooks in order (1 → 4) for reproducibility.
+```
+{{cookiecutter.project_slug}}/
+├── README.md                    # Project documentation
+├── .gitignore                   # Git ignore rules
+├── pyproject.toml              # Project configuration
+├── requirements.txt            # Python dependencies
+│
+├── src/{{cookiecutter.package_name}}/
+│   ├── __init__.py             # Package initialization
+│   ├── core/                   # Core functionality modules
+│   ├── utils/                  # Utility functions
+│   ├── cli.py                  # CLI interface (optional)
+│   ├── api/                    # REST API (optional)
+│   │   ├── __init__.py
+│   │   ├── app.py
+│   │   ├── routes/
+│   │   └── utils/
+│   └── [AI/ML modules]         # If include_ai_research enabled
+│       ├── data/               # Data processing
+│       ├── features/           # Feature engineering
+│       ├── models/             # Model definitions
+│       ├── train/              # Training utilities
+│       ├── eval/               # Evaluation utilities
+│       └── infer/              # Inference utilities
+│
+├── notebooks/                  # Jupyter notebooks (if AI/ML enabled)
+├── experiments/                # Experiment tracking (if AI/ML enabled)
+│   ├── configs/
+│   └── runs/
+├── data/                       # Data storage (if AI/ML enabled)
+│   ├── raw/
+│   └── processed/
+├── reports/                    # Reports and outputs (if AI/ML enabled)
+│   ├── figures/
+│   └── tables/
+├── scripts/                    # Utility scripts (if API enabled)
+└── tests/                      # Test suite
+    ├── test_core.py
+    ├── test_cli.py             # (if CLI enabled)
+    ├── test_api.py             # (if API enabled)
+    ├── test_models.py          # (if AI/ML enabled)
+    └── test_train.py           # (if AI/ML enabled)
+```
 
+## Getting Started
 
-## Utility Development Workflow
+1. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-This template supports a workflow where you can **develop functions inside notebooks** 
-and automatically sync them into `src/utils.py`:
+2. **Run tests**:
+   ```bash
+   pytest tests/
+   ```
 
-1. Open `notebooks/0_setup.ipynb`.
-2. Use `%%writefile -a ../src/utils.py` in a cell to append a new function to `utils.py`.
-3. `%autoreload` ensures that updates are immediately available without restarting the kernel.
+## Development Workflow
 
-Example:
+### For AI/ML Research Projects
+
+Run notebooks in order for reproducibility:
+1. Open `notebooks/0_setup.ipynb`
+2. Proceed through analysis notebooks (1 → 4)
+
+You can **develop functions inside notebooks** and automatically sync them into `src/`:
 
 ```python
-%%writefile -a ../src/utils.py
+%%writefile -a ../src/{{cookiecutter.package_name}}/utils/__init__.py
 def my_new_helper(x, y):
     return x + y
 
 # Now immediately usable:
-from src import utils
-utils.my_new_helper(2, 3)
+from {{cookiecutter.package_name}}.utils import my_new_helper
+my_new_helper(2, 3)
 ```
 
-This keeps reusable utilities in one place while letting you prototype in Jupyter naturally.
+### For API Projects
+
+Start the API server:
+```bash
+python -m {{cookiecutter.package_name}}.api.app
+```
+
+### For CLI Projects
+
+Run CLI commands:
+```bash
+python -m {{cookiecutter.package_name}}.cli --help
+```
+
+## Configuration Options
+
+This template is generated from a cookiecutter with the following options:
+- `include_cli`: Enable CLI interface
+- `include_api`: Enable REST API with FastAPI
+- `include_ai_research`: Enable AI/ML research modules and notebooks
+
+Based on your selections, only relevant directories and test files are included.

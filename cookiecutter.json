@@ -2,6 +2,10 @@
     "project_id": "PRJ-001",
     "project_name": "Exploratory Analysis of XYZ",
     "project_slug": "xyz-analysis",
+    "package_name": "xyz_analysis",
     "author_name": "Your Name",
-    "date_created": "2025-10-29"
+    "date_created": "2025-10-29",
+    "include_cli": "no",
+    "include_api": "no",
+    "include_ai_research": "no"
 }
