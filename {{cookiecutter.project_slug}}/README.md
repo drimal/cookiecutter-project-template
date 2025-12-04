@@ -1,4 +1,4 @@
-# {{ cookiecutter.project_name }} ({{ cookiecutter.project_id }})
+# {{ cookiecutter.project_name }}
 
 **Author**: {{ cookiecutter.author_name }}  
 **Created**: {{ cookiecutter.date_created }}  
