@@ -1,112 +1,213 @@
 # cookiecutter-project-template
 
-# Quickstart Guide
+A flexible cookiecutter template for creating Python projects with support for multiple project types: utilities, REST APIs, and AI/ML research workflows.
 
-Welcome to your analysis project scaffold! This guide summarizes the most common workflows.
+## Quick Start
 
----
+### 1. Install & Create a Project
 
-## 1. Create a New Project
 ```bash
 pip install cookiecutter
-cookiecutter git@github.com:drimal/cookiecutter-project-template.git
+cookiecutter https://github.com/drimal/cookiecutter-project-template.git
 ```
 
-You’ll be asked to enter:
-- Project ID
-- Project Name
-- Slug (short identifier)
-- Author
-- Date
+You'll be prompted to enter:
+- **project_id**: Unique project identifier (e.g., `PRJ-001`)
+- **project_name**: Full project name (e.g., `Data Analysis Tool`)
+- **project_slug**: URL-friendly slug (e.g., `data-analysis-tool`)
+- **package_name**: Python package name (e.g., `data_analysis_tool`)
+- **author_name**: Your name
+- **date_created**: Creation date
+- **include_cli**: Enable CLI interface? (yes/no)
+- **include_api**: Enable REST API? (yes/no)
+- **include_ai_research**: Enable AI/ML research modules? (yes/no)
 
-This generates a structured project with notebooks, prompts, and utilities.
+This generates a complete, ready-to-use project structure.
 
----
+### 2. Project Structure
 
-## 2. Prompt Management
-- Draft prompts in your notebook.
-- Save them into the central registry with:
+The generated project includes:
 
-```python
-from src import utils
-
-system_prompt = """You are a precise assistant. Summarize in 3 sentences."""
-utils.save_prompt(
-    role="system_prompts",
-    pid="sys_summarizer",
-    description="3-sentence summarizer",
-    text=system_prompt
-)
+```
+{{cookiecutter.project_slug}}/
+├── README.md                    # Project documentation
+├── .gitignore                   # Git ignore rules
+├── pyproject.toml              # Project configuration & dependencies
+├── requirements.txt            # Python dependencies
+│
+├── src/{{cookiecutter.package_name}}/
+│   ├── __init__.py             # Package initialization
+│   ├── core/                   # Core functionality modules
+│   ├── utils/                  # Utility functions & helpers
+│   ├── cli.py                  # CLI interface (if enabled)
+│   ├── api/                    # REST API with FastAPI (if enabled)
+│   │   ├── __init__.py
+│   │   ├── app.py
+│   │   ├── routes/
+│   │   └── utils/
+│   └── [AI/ML modules]         # (if include_ai_research enabled)
+│       ├── data/               # Data processing
+│       ├── features/           # Feature engineering
+│       ├── models/             # Model definitions
+│       ├── train/              # Training utilities
+│       ├── eval/               # Evaluation utilities
+│       └── infer/              # Inference utilities
+│
+├── notebooks/                  # Jupyter notebooks (AI/ML only)
+├── experiments/                # Experiment tracking (AI/ML only)
+│   ├── configs/
+│   └── runs/
+├── data/                       # Data directory (AI/ML only)
+│   ├── raw/
+│   └── processed/
+├── reports/                    # Reports & outputs (AI/ML only)
+│   ├── figures/
+│   └── tables/
+├── scripts/                    # Utility scripts (API only)
+└── tests/                      # Test suite
+    ├── test_core.py
+    ├── test_cli.py             # (if CLI enabled)
+    ├── test_api.py             # (if API enabled)
+    ├── test_models.py          # (if AI/ML enabled)
+    └── test_train.py           # (if AI/ML enabled)
 ```
 
-This updates:
-- `prompts/prompts.yaml` (registry with metadata)
-- `prompts/archive/` (plain text versioned files for Git diffs)
+### 3. Getting Started with Your Project
 
----
-
-## 3. Experiment Logging
-Log each run with a link to the prompt ID:
-
-```python
-utils.log_run(
-    config="GPT-4 baseline",
-    dataset="essays",
-    metric=0.82,
-    notes="Test with summarizer",
-    prompt_id="sys_summarizer_v1"
-)
-```
-
-View styled log:
-```python
-utils.display_run_log()
-```
-
-Save to CSV:
-```python
-utils.save_run_log()
-```
-
----
-
-## 4. Analysis & Reporting
-- `3_results.ipynb` compares metrics by **Prompt ID** (tables + charts).  
-- `4_report.ipynb` summarizes findings in stakeholder-friendly Markdown, including per-prompt results.
-
----
-
-## 5. Running the Pipeline
-Re-run all notebooks in order with one command:
+After generating the project:
 
 ```bash
-pip install papermill
-python run_pipeline.py
+cd {{cookiecutter.project_slug}}
+pip install -r requirements.txt
+pytest tests/                   # Run tests
 ```
 
-This executes notebooks 1 → 4 and saves executed versions with `_out.ipynb` suffix.
+**For CLI Projects:**
+```bash
+python -m {{cookiecutter.package_name}}.cli --help
+```
 
----
+**For API Projects:**
+```bash
+python -m {{cookiecutter.package_name}}.api.app
+# Visit http://localhost:8000/docs for API documentation
+```
 
-## 6. Notebook Utilities Workflow
-Prototype helpers in a notebook, then promote to `utils.py`:
+**For AI/ML Research:**
+```bash
+# Open notebooks in Jupyter and run them in order
+jupyter notebook notebooks/
+```
+
+### 4. Development Workflow
+
+#### Writing Code
+- **Core logic**: `src/{{cookiecutter.package_name}}/core/`
+- **Utilities**: `src/{{cookiecutter.package_name}}/utils/`
+- **Tests**: `tests/test_*.py`
+
+#### Running Tests
+```bash
+pytest tests/ -v                # Verbose output
+pytest tests/ --cov            # With coverage report
+```
+
+#### Code Quality
+```bash
+black src/ tests/              # Format code
+flake8 src/ tests/             # Lint
+mypy src/                      # Type checking
+```
+
+#### Notebook Development (AI/ML projects)
+Develop functions in notebooks and sync to source files:
 
 ```python
-%%writefile -a src/utils.py
-def plot_metrics(df):
-    import matplotlib.pyplot as plt
-    df.plot(x="Run ID", y="Metric", marker="o")
-    plt.show()
+%%writefile -a ../src/{{cookiecutter.package_name}}/utils/__init__.py
+def my_helper(x, y):
+    """Example helper function"""
+    return x + y
 ```
 
-With `%autoreload` enabled (in `0_setup.ipynb`), changes are instantly available.
+Import and use immediately:
+```python
+from {{cookiecutter.package_name}}.utils import my_helper
+result = my_helper(1, 2)
+```
 
----
+### 5. Configuration
 
-## 7. Configuration
-Project settings live in `project_config.yaml`.  
-Update thresholds, default dataset paths, and project metadata here.
+Edit `pyproject.toml` to:
+- Add project dependencies
+- Configure pytest options
+- Set code formatting rules (black, isort, mypy)
 
----
+Edit `requirements.txt` for simple dependency specification.
 
-✅ You now have a reproducible, prompt-aware analysis workflow with minimal manual overhead.
+## Template Features
+
+### Flexible Configuration
+Choose which components to include:
+- ✅ **CLI**: Command-line interface for tools
+- ✅ **API**: FastAPI-based REST API server
+- ✅ **AI/ML Research**: Complete research workflow with notebooks and experiments
+
+### Modern Python Setup
+- `pyproject.toml` for all project configuration
+- Optional dependencies for different features
+- Built-in pytest configuration with coverage
+- Pre-configured black, isort, and flake8 settings
+
+### Complete Test Suite
+- Test files for all enabled components
+- Pre-configured pytest in `pyproject.toml`
+- Support for coverage reporting
+
+### Development-Ready
+- `.gitignore` with Python best practices
+- Clear directory structure following Python conventions
+- Modular organization for scalability
+
+## Examples
+
+### Basic Utility Package
+```bash
+cookiecutter https://github.com/drimal/cookiecutter-project-template.git
+# Select: include_cli=no, include_api=no, include_ai_research=no
+```
+Creates a minimal Python package for libraries or utilities.
+
+### REST API
+```bash
+cookiecutter https://github.com/drimal/cookiecutter-project-template.git
+# Select: include_cli=no, include_api=yes, include_ai_research=no
+```
+Creates a FastAPI project with API routes and utilities.
+
+### AI/ML Research
+```bash
+cookiecutter https://github.com/drimal/cookiecutter-project-template.git
+# Select: include_cli=no, include_api=no, include_ai_research=yes
+```
+Creates a research project with notebooks, experiments, and data directories.
+
+### Full Stack
+```bash
+cookiecutter https://github.com/drimal/cookiecutter-project-template.git
+# Select: include_cli=yes, include_api=yes, include_ai_research=yes
+```
+Creates a complete project with CLI, API, and research capabilities.
+
+## Repository Structure
+
+This repository contains:
+- `cookiecutter.json` - Template configuration and variables
+- `{{cookiecutter.project_slug}}/` - The template directory that gets generated as your new project
+
+## Contributing
+
+Improvements and suggestions are welcome! Feel free to open issues or pull requests.
+
+## License
+
+This template is provided as-is for creating new projects.
