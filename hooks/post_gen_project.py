@@ -12,7 +12,6 @@ include_ai_research = "{{ cookiecutter.include_ai_research }}" == "yes"
 package_name = "{{ cookiecutter.package_name }}"
 
 project_root = Path(".")
-project_dir = Path.cwd().name
 
 def remove_if_exists(path):
     """Remove a file or directory if it exists."""
@@ -59,9 +58,17 @@ print(f"📋 Configuration:")
 print(f"   • CLI support: {'✅ Enabled' if include_cli else '❌ Disabled'}")
 print(f"   • API support: {'✅ Enabled' if include_api else '❌ Disabled'}")
 print(f"   • AI/ML research: {'✅ Enabled' if include_ai_research else '❌ Disabled'}")
+project_dir = Path.cwd().name
+
 print(f"\n📚 Next steps:")
 print(f"   1. cd {project_dir}")
-print(f"   2. python -m venv .venv && source .venv/bin/activate")
+
+# Prefer 'uv' (if available) as an alternative virtualenv helper
+if shutil.which("uv"):
+    print(f"   2. (optional) create/activate virtualenv with `uv`: e.g. `uv .venv`")
+else:
+    print(f"   2. python -m venv .venv && source .venv/bin/activate")
+
 print(f"   3. pip install -r requirements.txt")
 print(f"   4. pytest tests/")
 
