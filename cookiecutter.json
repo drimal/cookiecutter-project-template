@@ -1,10 +1,9 @@
 {
-    "project_id": "PRJ-001",
-    "project_name": "Exploratory Analysis of XYZ",
-    "project_slug": "xyz-analysis",
-    "package_name": "xyz_analysis",
+    "project_name": "My Project",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+    "package_name": "{{ cookiecutter.project_slug.replace('-', '_') }}",
     "author_name": "Your Name",
-    "date_created": "2025-10-29",
+    "date_created": "{% now 'utc', '%Y-%m-%d' %}",
     "include_cli": "no",
     "include_api": "no",
     "include_ai_research": "no"

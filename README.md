@@ -12,17 +12,13 @@ cookiecutter https://github.com/drimal/cookiecutter-project-template.git
 ```
 
 You'll be prompted to enter:
-- **project_id**: Unique project identifier (e.g., `PRJ-001`)
-- **project_name**: Full project name (e.g., `Data Analysis Tool`)
-- **project_slug**: URL-friendly slug (e.g., `data-analysis-tool`)
-- **package_name**: Python package name (e.g., `data_analysis_tool`)
+- **project_name**: Your project name (e.g., `Data Analysis Tool`)
 - **author_name**: Your name
-- **date_created**: Creation date
 - **include_cli**: Enable CLI interface? (yes/no)
 - **include_api**: Enable REST API? (yes/no)
 - **include_ai_research**: Enable AI/ML research modules? (yes/no)
 
-This generates a complete, ready-to-use project structure.
+The `project_slug` and `package_name` are automatically generated from your project name, and the creation date is set to today automatically.
 
 ### 2. Project Structure
 
