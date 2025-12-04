@@ -69,7 +69,9 @@ print(f"   1. cd {project_dir}")
 # it reliably here, so show both usage and install instructions for Unix and
 # Windows (PowerShell and cmd) users.
 if shutil.which("uv"):
-    print(f"   2. (optional) create/activate virtualenv with `uv`: e.g. `uv .venv`")
+    print(f"   2. (optional) create/activate virtualenv with `uv`: e.g. `uv .venv --python 3.11`")
+    print(f"    `source .venv/bin/activate` (Linux/Mac) OR `source .venv/Scripts/activate` (If Windows)")
+   
 else:
     # Unix / macOS
     print(f"   2. python -m venv .venv && source .venv/bin/activate")
